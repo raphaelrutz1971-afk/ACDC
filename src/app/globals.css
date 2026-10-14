@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+ * jera — "ledger & highlighter"
+ * paper: cool ledger paper · ink: slate · fir: binding cloth green
+ * rule: ledger ruling · marker: highlighter, reserved for focus and "now"
+ */
+:root {
+  --paper: #f3f5f2;
+  --surface: #ffffff;
+  --ink: #142229;
+  --muted: #56666b;
+  --fir: #1d4b42;
+  --fir-strong: #143831;
+  --on-fir: #f3f5f2;
+  --rule: #c5d9cf;
+  --rule-strong: #93b6a7;
+  --marker: #ecd84a;
+  --on-marker: #142229;
+  --danger: #a3341f;
+  --success: #1d6b4f;
+  --band: #173a33;
+  --on-band: #e9efec;
+  --band-muted: #a9c2b9;
+  --band-rule: #2f564d;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --paper: #0f1a1d;
+  --surface: #152428;
+  --ink: #e4ebe8;
+  --muted: #9aaba9;
+  --fir: #84bfab;
+  --fir-strong: #a5d4c3;
+  --on-fir: #0f1a1d;
+  --rule: #24393b;
+  --rule-strong: #3a5a57;
+  --marker: #e2cd42;
+  --on-marker: #142229;
+  --danger: #f08a73;
+  --success: #7fd0ad;
+  --band: #132d28;
+  --on-band: #e4ebe8;
+  --band-muted: #9ab5ab;
+  --band-rule: #29473f;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-fir: var(--fir);
+  --color-fir-strong: var(--fir-strong);
+  --color-on-fir: var(--on-fir);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-marker: var(--marker);
+  --color-on-marker: var(--on-marker);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-band: var(--band);
+  --color-on-band: var(--on-band);
+  --color-band-muted: var(--band-muted);
+  --color-band-rule: var(--band-rule);
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-text), ui-serif, Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "tnum" 0;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--marker);
+  color: var(--on-marker);
+}
+
+:focus-visible {
+  outline: 3px solid var(--marker);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+[data-theme="light"] :focus-visible {
+  outline-color: var(--ink);
+  box-shadow: 0 0 0 6px var(--marker);
+}
+
+@layer components {
+  /* Ledger ruling: a hairline every 2rem, like accounting paper. */
+  .ledger {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(2rem - 1px),
+      var(--rule) calc(2rem - 1px),
+      var(--rule) 2rem
+    );
+  }
+
+  /* Highlighter stroke behind inline text. */
+  .mark {
+    background-image: linear-gradient(
+      100deg,
+      transparent 0.2em,
+      var(--marker) 0.35em,
+      var(--marker) calc(100% - 0.3em),
+      transparent calc(100% - 0.15em)
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 0.62em;
+    background-position: 0 88%;
+    color: inherit;
+  }
+
+  .mark-hover {
+    background-image: linear-gradient(var(--marker), var(--marker));
+    background-repeat: no-repeat;
+    background-size: 0% 0.4em;
+    background-position: 0 92%;
+    transition: background-size 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .group:hover .mark-hover,
+  .group:focus-visible .mark-hover,
+  .mark-hover:hover {
+    background-size: 100% 0.4em;
+  }
+
+  .prose-body {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+}
